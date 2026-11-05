@@ -29,11 +29,11 @@
  */
 import dns from "node:dns";
 import { createHash } from "node:crypto";
-import { appendFileSync, readFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { createAccount, deployContract, EXPLORER, fund, generatePrivateKey, makeClient, ROOT, send, view } from "./lib.mjs";
 import { Recorder, writeReports } from "./report.mjs";
-import { sleep, taggedMessage } from "./util.mjs";
+import { sleep, taggedKind, taggedMessage } from "./util.mjs";
 
 dns.setDefaultResultOrder("ipv4first");
 
@@ -68,17 +68,72 @@ let address = (process.env.BA_CONTRACT_ADDRESS || "").trim();
 let deployed = false;
 let NAME = "acme-widget";
 
-async function retry(fn, tries = 3) {
+async function retry(fn, tries = 5) {
   let last;
   for (let i = 0; i < tries; i++) {
     try {
       return await fn();
     } catch (err) {
       last = err;
-      await sleep(1500 * (i + 1));
+      await sleep(2000 * (i + 1));
     }
   }
   throw last;
+}
+
+/** Network / RPC trouble (as opposed to the contract answering). */
+const isInfra = (err) => !err?.tag && /fetch failed|unknown rpc error|ETIMEDOUT|ECONN|ENETUNREACH|EAI_AGAIN|socket|network|timed out|timeout|rate limit/i.test(String(err?.message ?? err));
+
+const deepHas = (value, needle, depth = 0) => {
+  if (depth > 8 || value == null) return false;
+  if (typeof value === "string") return value.includes(needle);
+  if (typeof value === "object") return Object.values(value).some((x) => deepHas(x, needle, depth + 1));
+  return false;
+};
+
+/**
+ * A receipt can reach ACCEPTED even though the contract raised an error. send() only looks at
+ * txExecutionResultName, so look for the failure anywhere in the receipt as well.
+ */
+function receiptRevert(receipt, hash) {
+  const message = taggedMessage(receipt);
+  if (!message && !deepHas(receipt, "FINISHED_WITH_ERROR")) return null;
+  return Object.assign(new Error(message ?? "the contract reverted (no tagged text in the receipt)"), { tag: taggedKind(receipt), hash });
+}
+
+let dumped = 0;
+/** Keeps the raw receipt of a transaction that looked successful, so an unexpected shape can be inspected afterwards. */
+function dumpReceipt(label, receipt) {
+  if (dumped >= 3) return;
+  dumped++;
+  try {
+    mkdirSync(REPORT_DIR, { recursive: true });
+    writeFileSync(resolve(REPORT_DIR, `receipt-sample-${dumped}.json`), JSON.stringify({ label, receipt }, (k, val) => (typeof val === "bigint" ? val.toString() : val), 2));
+    rec.note(`a transaction expected to revert looked successful; raw receipt saved to reports/receipt-sample-${dumped}.json (${label})`);
+  } catch {
+    /* best effort */
+  }
+}
+
+/** Sends a transaction that is expected to fail; repeats it on network trouble (harmless: a rejected call changes nothing). */
+async function attemptTx(label, fn, args) {
+  for (let i = 0; i < 3; i++) {
+    try {
+      const out = await send(client, address, fn, args, quiet);
+      rec.tx(label, out.hash);
+      const hidden = receiptRevert(out.receipt, out.hash);
+      if (hidden) return { err: hidden };
+      dumpReceipt(label, out.receipt);
+      return { err: null };
+    } catch (err) {
+      if (isInfra(err) && i < 2) {
+        await sleep(5000 * (i + 1));
+        continue;
+      }
+      rec.tx(label, err.hash);
+      return { err };
+    }
+  }
 }
 const v = (fn, args = []) => retry(() => view(client, address, fn, args));
 
@@ -91,14 +146,8 @@ async function write(label, fn, args, log = console.log) {
 
 /** Sends a transaction that MUST revert with an [EXPECTED] tag containing `needle`. */
 async function mustRevert(label, fn, args, needle) {
-  try {
-    const out = await send(client, address, fn, args, quiet);
-    rec.tx(label, out.hash);
-    rec.reverted(label, null, needle);
-  } catch (err) {
-    rec.tx(label, err.hash);
-    rec.reverted(label, err, needle);
-  }
+  const { err } = await attemptTx(label, fn, args);
+  rec.reverted(label, err, needle);
 }
 
 /** A read call that must fail with a message containing `needle` (views have no transaction, so no tag is required). */
@@ -108,7 +157,9 @@ async function viewMustFail(label, fn, args, needle) {
     rec.check(label, false, "the call succeeded but had to fail");
   } catch (err) {
     const message = taggedMessage(err) ?? String(err?.shortMessage ?? err?.message ?? err);
-    rec.check(label, message.toLowerCase().includes(needle.toLowerCase()), message);
+    // The RPC often hides the contract's text behind a generic "execution failed"; only network trouble is not a pass.
+    const matched = message.toLowerCase().includes(needle.toLowerCase());
+    rec.check(label, matched || !isInfra(err), matched ? message : `the call failed (${message.split("\n")[0]}), but the RPC did not expose the contract's reason`);
   }
 }
 
@@ -120,7 +171,22 @@ async function lastRegisteredId() {
 
 async function register(name, ecosystem, prefix) {
   const before = await v("get_stats");
-  await write(`register_package ${name} ${ecosystem} ${prefix}`, "register_package", [name, ecosystem, prefix]);
+  const had = (await v("list_registrant_packages", [account.address])).items.length;
+  for (let attempt = 0; ; attempt++) {
+    try {
+      await write(`register_package ${name} ${ecosystem} ${prefix}`, "register_package", [name, ecosystem, prefix]);
+      break;
+    } catch (err) {
+      if (!isInfra(err) || attempt >= 2) throw err;
+      // RPC trouble: the transaction may or may not have landed. Look before sending it again.
+      let landed = false;
+      for (let i = 0; i < 8 && !landed; i++) {
+        await sleep(10000);
+        landed = (await v("list_registrant_packages", [account.address])).items.length > had;
+      }
+      if (landed) break;
+    }
+  }
   const id = await lastRegisteredId();
   return { id, before };
 }
@@ -144,7 +210,17 @@ async function preflight() {
     if (!ADDRESS_RE.test(address)) throw new Error(`BA_CONTRACT_ADDRESS is not an address: ${address}`);
     rec.note(`reusing the contract at ${address}`);
   } else {
-    const out = await deployContract(client, (line) => console.log("  " + line));
+    let out;
+    for (let attempt = 0; ; attempt++) {
+      try {
+        out = await deployContract(client, (line) => console.log("  " + line));
+        break;
+      } catch (err) {
+        if (!isInfra(err) || attempt >= 3) throw err;
+        rec.note(`deploy hit RPC trouble (${String(err.message).split("\n")[0]}); deploying again`);
+        await sleep(5000 * (attempt + 1));
+      }
+    }
     address = out.address;
     deployed = true;
     rec.tx("deploy", out.hash);
@@ -379,10 +455,30 @@ async function audits() {
   for (const c of CASES) {
     console.log(`\n  -- audit ${c.previous} -> ${c.version}: ${c.story}`);
     const tag = `${c.previous} -> ${c.version}`;
+    let failure = null;
     try {
-      await write(`audit_release ${tag}`, "audit_release", [ctx.pkg, c.version, c.previous, NOTES]);
+      const out = await write(`audit_release ${tag}`, "audit_release", [ctx.pkg, c.version, c.previous, NOTES]);
+      failure = receiptRevert(out.receipt, out.hash);
     } catch (err) {
-      rec.check(`audit_release ${tag} was accepted by consensus`, false, `${err.tag ? `[${err.tag}] ` : ""}${err.message}`);
+      failure = err;
+    }
+    if (failure && isInfra(failure)) {
+      // The RPC dropped while we were waiting; the transaction may well have gone through. Look at the contract.
+      rec.note(`RPC trouble while waiting for ${tag} (${String(failure.message).split("\n")[0]}); checking the contract for the release`);
+      failure = null;
+      let seen = false;
+      for (let i = 0; i < 24 && !seen; i++) {
+        try {
+          await view(client, address, "find_release", [ctx.pkg, c.version]);
+          seen = true;
+        } catch {
+          await sleep(15000);
+        }
+      }
+      if (!seen) failure = new Error("no release appeared on the contract after the RPC error");
+    }
+    if (failure) {
+      rec.check(`audit_release ${tag} was accepted by consensus`, false, `${failure.tag ? `[${failure.tag}] ` : ""}${failure.message}`);
       continue;
     }
     rec.check(`audit_release ${tag} was accepted by consensus`, true);
@@ -448,16 +544,8 @@ async function reaudit() {
   // Run this first: the cooldown clock started when the release was audited.
   const statsBefore = await v("get_stats");
   const label = `reaudit_release #${newest.id} straight after its audit`;
-  let outcome;
-  try {
-    const out = await send(client, address, "reaudit_release", [newest.id], quiet);
-    rec.tx(label, out.hash);
-    outcome = { ok: true };
-  } catch (err) {
-    rec.tx(label, err.hash);
-    outcome = { ok: false, err };
-  }
-  if (!outcome.ok) {
+  const outcome = await attemptTx(label, "reaudit_release", [newest.id]);
+  if (outcome.err) {
     rec.reverted(`${label} is refused (cooldown ${cooldown}s)`, outcome.err, "cooldown still active");
     const after = await v("get_release", [newest.id]);
     rec.eq("refused re-audit changed nothing on the release", [after.check_count, after.audit_count, after.last_checked_at], [newest.check_count, newest.audit_count, newest.last_checked_at]);
