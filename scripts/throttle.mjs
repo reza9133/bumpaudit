@@ -15,7 +15,35 @@ const PENALTY_MS = Number(process.env.BA_RPC_PENALTY_MS) || 12_000;
 const MAX_RETRIES = 6;
 const EXEMPT_HOSTS = /(^|\.)(github\.com|githubusercontent\.com)$/i;
 
-const realFetch = globalThis.fetch;
+// Codespaces / CI networks sometimes need more than Node's default 250 ms per address family to connect.
+try {
+  (await import("node:net")).setDefaultAutoSelectFamilyAttemptTimeout?.(4000);
+} catch {
+  /* older Node: ignore */
+}
+
+const rawFetch = globalThis.fetch;
+const CONNECT_CODES = new Set(["ETIMEDOUT", "ECONNREFUSED", "ENETUNREACH", "EHOSTUNREACH", "EAI_AGAIN", "ENOTFOUND", "UND_ERR_CONNECT_TIMEOUT"]);
+
+/** True when the request never reached the server (connection could not be established), so repeating it is safe. */
+function connectFailure(err, depth = 0) {
+  if (!err || depth > 5) return false;
+  if (CONNECT_CODES.has(err.code)) return true;
+  if (Array.isArray(err.errors) && err.errors.some((e) => connectFailure(e, depth + 1))) return true;
+  return connectFailure(err.cause, depth + 1);
+}
+
+async function realFetch(input, init) {
+  const replayable = typeof input === "string" || input instanceof URL;
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await rawFetch(input, init);
+    } catch (err) {
+      if (!replayable || attempt >= 5 || !connectFailure(err)) throw err;
+      await new Promise((resolve) => setTimeout(resolve, 2000 * (attempt + 1)));
+    }
+  }
+}
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const stamps = [];
 let queue = Promise.resolve();
