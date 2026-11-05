@@ -1,0 +1,20 @@
+{
+  "name": "bump-audit",
+  "private": true,
+  "version": "1.0.0",
+  "description": "BumpAudit - a GenLayer Intelligent Contract that audits whether version bumps tell the truth",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "pytest -q",
+    "test:js": "node --test scripts/util.test.mjs",
+    "test:offline": "python tools/offline_pytest/run.py -q -p offline_sim.plugin tests/contract",
+    "test:sim": "python tools/offline_pytest/run.py -q -p offline_sim.plugin tools/offline_sim/test_sim.py",
+    "mutation": "python scripts/mutation_check.py",
+    "deploy": "node scripts/deploy.mjs",
+    "demo": "node scripts/demo.mjs"
+  },
+  "dependencies": {
+    "genlayer-js": "1.2.0"
+  }
+}
