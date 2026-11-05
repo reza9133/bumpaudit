@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BumpAudit live E2E report · PASS</title>
+<style>
+:root{--bg:#fff;--fg:#1c1f24;--muted:#5c6570;--line:#dde1e6;--ok:#15803d;--no:#b91c1c;--okbg:#e8f6ed;--nobg:#fdecec;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--bg:#14171a;--fg:#e6e9ec;--muted:#9aa4ae;--line:#2c3238;--ok:#4ade80;--no:#f87171;--okbg:#14291c;--nobg:#2e1717}}
+body{margin:0;padding:24px;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif;max-width:960px;margin-inline:auto}
+h1{margin:0 0 4px}h2{font-size:1.05rem;margin:28px 0 4px}.muted{color:var(--muted);margin:0 0 8px}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;font-size:.8rem;font-weight:600}
+.pill.pass{background:var(--okbg);color:var(--ok)}.pill.fail{background:var(--nobg);color:var(--no)}
+.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%}td{padding:5px 8px;border-top:1px solid var(--line);vertical-align:top}
+.mark{width:2.5em;font-family:ui-monospace,monospace;font-weight:600}tr.ok .mark{color:var(--ok)}tr.no{background:var(--nobg)}tr.no .mark{color:var(--no)}
+.detail{color:var(--muted);font-size:.85rem;font-family:ui-monospace,monospace;word-break:break-word}.note{color:var(--muted);font-size:.9rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:2px 16px;font-size:.9rem}dt{color:var(--muted)}dd{margin:0;word-break:break-all}
+</style></head><body>
+<h1>BumpAudit live E2E report</h1>
+<p><span class="pill pass">PASS</span> 131 of 131 checks passed, 0 failed · 5 scenario(s) · 764s</p>
+<dl><dt>contract</dt><dd>0x54A2774072103a071d3EAB9FBF762A17F193C57e</dd><dt>account</dt><dd>0xc940aD2BdA5e5Da13AF2d2C0C6cF07775cB30FB9</dd><dt>network</dt><dd>GenLayer Studionet</dd><dt>fixture base</dt><dd>https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures</dd><dt>package name</dt><dd>acme-widget</dd><dt>started</dt><dd>2026-11-05T09:26:20.707Z</dd><dt>finished</dt><dd>2026-11-05T09:39:04.868Z</dd></dl>
+<section><h2><span class="pill pass">PASS</span> 0. Preflight</h2>
+<p class="muted">7/7 checks · 12.9s</p>
+<div class="scroll"><table><tbody>
+<tr class="ok"><td class="mark">ok</td><td>account funded through sim_fundAccount</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>contract answers get_version<div class="detail">got &quot;1.0.0&quot;</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_limits reports the 300 s re-audit cooldown<div class="detail">got 300</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>npm and pypi are supported ecosystems</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>fresh deployment starts empty</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>fixture is publicly reachable (https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures/CHANGELOG.md)<div class="detail">HTTP 200</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>hosted fixture matches examples/fixtures/CHANGELOG.md</td></tr>
+</tbody></table></div>
+<p class="note">deployed a fresh contract at 0x54A2774072103a071d3EAB9FBF762A17F193C57e</p></section>
+<section><h2><span class="pill pass">PASS</span> 1. Basics and registration</h2>
+<p class="muted">20/20 checks · 173.2s</p>
+<div class="scroll"><table><tbody>
+<tr class="ok"><td class="mark">ok</td><td>first package id is sequential</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: name</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: ecosystem</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: source_prefix keeps the trailing slash</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: registrant is the sender</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: fresh counters</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: no integrity score before any judgement</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: created_at is set<div class="detail">got 1793870796</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_stats: packages +1</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_stats: releases and audits untouched</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>find_packages lists the new package<div class="detail">[1]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>exact duplicate is refused<div class="detail">[EXPECTED] this package and source are already registered as package #1</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>duplicate with different name case is refused<div class="detail">[EXPECTED] this package and source are already registered as package #1</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>duplicate with a padded, upper-case ecosystem is refused<div class="detail">[EXPECTED] this package and source are already registered as package #1</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>duplicates did not create packages</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>same name under another ecosystem gets the next id</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>same name under another source prefix gets the next id</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>find_packages(npm, name) now shows both npm entries<div class="detail">[1,3]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>find_packages(pypi, name) shows only the pypi entry<div class="detail">[2]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>the two npm entries keep their own prefixes</td></tr>
+</tbody></table></div>
+</section>
+<section><h2><span class="pill pass">PASS</span> 2. Adversarial input validation</h2>
+<p class="muted">24/24 checks · 356.5s</p>
+<div class="scroll"><table><tbody>
+<tr class="ok"><td class="mark">ok</td><td>boundary package registered (prefix without trailing slash)</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>its prefix is stored as given</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>name blank (&quot;&quot;)<div class="detail">[EXPECTED] name must be 1-80 characters from A-Z a-z 0-9 . _ - @ / + and start with a letter, digit or @</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>name whitespace only (&quot;   &quot;)<div class="detail">[EXPECTED] name must be 1-80 characters from A-Z a-z 0-9 . _ - @ / + and start with a letter, digit or @</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>ecosystem python (&quot;python&quot;)<div class="detail">[EXPECTED] ecosystem must be one of: npm, pypi, cargo, go, maven, nuget, rubygems, composer, hex, pub, swift, other</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>ecosystem unknown (&quot;unknown&quot;)<div class="detail">[EXPECTED] ecosystem must be one of: npm, pypi, cargo, go, maven, nuget, rubygems, composer, hex, pub, swift, other</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>source_prefix IPv4 literal (&quot;https://127.0.0.1/&quot;)<div class="detail">[EXPECTED] source_prefix must be a public https:// URL on a domain name with a path (no IP addresses, ports, userinfo, query, fragment or dot-segments)</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>source_prefix cloud metadata address (&quot;https://169.254.169.254/latest/meta-data/&quot;)<div class="detail">[EXPECTED] source_prefix must be a public https:// URL on a domain name with a path (no IP addresses, ports, userinfo, query, fragment or dot-segments)</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url also rejects IPv4 literal<div class="detail">{&quot;canonical&quot;:&quot;&quot;,&quot;valid&quot;:false}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url also rejects cloud metadata address<div class="detail">{&quot;canonical&quot;:&quot;&quot;,&quot;valid&quot;:false}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url accepts the real fixture prefix<div class="detail">{&quot;canonical&quot;:&quot;https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures/&quot;,&quot;valid&quot;:true}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>audit_release: version lower than previous (1.4.3 -&gt; 1.4.2)<div class="detail">[EXPECTED] version must be higher than previous_version</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>audit_release: version equal to previous (1.4.3 -&gt; 1.4.3)<div class="detail">[EXPECTED] version must be higher than previous_version</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>audit_release: unknown package id<div class="detail">[EXPECTED] package not found</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>notes_url plain http (&quot;http://raw.githubusercontent.com/reza9133/bu…&quot;)<div class="detail">[EXPECTED] notes_url must be a public https:// URL on a domain name (no IP addresses, ports, userinfo or dot-segments)</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>notes_url IP literal (&quot;https://127.0.0.1/reza9133/bumpaudit/main/ex…&quot;)<div class="detail">[EXPECTED] notes_url must be a public https:// URL on a domain name (no IP addresses, ports, userinfo or dot-segments)</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>notes_url same host, outside the source prefix<div class="detail">[EXPECTED] notes_url must be below this package's source prefix https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures/</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>notes_url another host entirely<div class="detail">[EXPECTED] notes_url must be below this package's source prefix https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures/</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>path boundary: &lt;prefix&gt;-evil/ is outside a slash-less prefix<div class="detail">[EXPECTED] notes_url must be below this package's source prefix https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>path boundary: &lt;prefix&gt;evil/ is outside a slash-less prefix<div class="detail">[EXPECTED] notes_url must be below this package's source prefix https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_stats identical after every rejected call</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>base package record identical after every rejected call</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>this account's package list is unchanged</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>no release was created by rejected audits</td></tr>
+</tbody></table></div>
+</section>
+<section><h2><span class="pill pass">PASS</span> 3. Live AI consensus and semantic auditing</h2>
+<p class="muted">55/55 checks · 103.9s</p>
+<div class="scroll"><table><tbody>
+<tr class="ok"><td class="mark">ok</td><td>audit_release 1.4.2 -&gt; 1.4.3 was accepted by consensus</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: verdict</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: severity</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: declared bump</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: required bump</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: release record agrees with the audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: release bookkeeping</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: the notes were read (entries found)<div class="detail">item_count 4</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: at least one entry classified breaking<div class="detail">breaking_entries 1</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: evidence is present (max 3 entries)<div class="detail">1 item(s)</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: evidence quotes &quot;--legacy&quot;<div class="detail">[&quot;Removed the deprecated `--legacy` flag. Scripts that still pass it now fail.&quot;]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: every evidence quote is verbatim in the stored release section<div class="detail">[&quot;Removed the deprecated `--legacy` flag. Scripts that still pass it now fail.&quot;]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: block hash is a Keccak-256 hex digest<div class="detail">521f84e0c0f18a76f071943709d56780e932204fc838c2985ce69a0c15a074e1</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: block hash is recorded on the release and in the notes view</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: stored section is this release's section only<div class="detail">block of 157 chars</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: no prompt-injection warning on clean notes</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: package counters after this audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>audit_release 1.4.3 -&gt; 1.5.0 was accepted by consensus</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: verdict</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: severity</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: declared bump</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: required bump</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: release record agrees with the audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: release bookkeeping</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: the notes were read (entries found)<div class="detail">item_count 4</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: at least one entry classified feature<div class="detail">feature_entries 1</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: evidence is present (max 3 entries)<div class="detail">1 item(s)</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: evidence quotes &quot;streaming uploads&quot;<div class="detail">[&quot;Added streaming uploads for large files.&quot;]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: every evidence quote is verbatim in the stored release section<div class="detail">[&quot;Added streaming uploads for large files.&quot;]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: block hash is a Keccak-256 hex digest<div class="detail">21f70b509390ad832dec37bc4df7592df7703ebebd888c625e3bd997d9a2a8e7</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: block hash is recorded on the release and in the notes view</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: stored section is this release's section only<div class="detail">block of 130 chars</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: no prompt-injection warning on clean notes</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.3 -&gt; 1.5.0: package counters after this audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>audit_release 1.5.0 -&gt; 2.0.0 was accepted by consensus</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: verdict</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: severity</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: declared bump</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: required bump</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: release record agrees with the audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: release bookkeeping</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: the notes were read (entries found)<div class="detail">item_count 4</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: at least one entry classified breaking<div class="detail">breaking_entries 1</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: evidence is present (max 3 entries)<div class="detail">1 item(s)</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: evidence quotes &quot;connect()&quot;<div class="detail">[&quot;Removed the legacy `connect()` API. Use `Client.open()` instead.&quot;]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: every evidence quote is verbatim in the stored release section<div class="detail">[&quot;Removed the legacy `connect()` API. Use `Client.open()` instead.&quot;]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: block hash is a Keccak-256 hex digest<div class="detail">1e3abb7361d6fb63d44f14af3d485b41113a605c1e19121ad4098f352ff3021f</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: block hash is recorded on the release and in the notes view</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: stored section is this release's section only<div class="detail">block of 166 chars</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: no prompt-injection warning on clean notes</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.5.0 -&gt; 2.0.0: package counters after this audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>integrity_permille is 666 (2 of 3 releases told the truth)</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>package totals: 3 releases, 2 compliant, 1 under-bumped, 0 over-bumped</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_stats deltas: +3 releases, +3 audits, +2 compliant, +1 under-bumped</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>global integrity_permille on a fresh contract is 666</td></tr>
+</tbody></table></div>
+</section>
+<section><h2><span class="pill pass">PASS</span> 4. Re-audit, cooldown and history paging</h2>
+<p class="muted">25/25 checks · 117.6s</p>
+<div class="scroll"><table><tbody>
+<tr class="ok"><td class="mark">ok</td><td>reaudit_release #3 straight after its audit is refused (cooldown 300s)<div class="detail">[EXPECTED] re-audit cooldown still active</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>refused re-audit changed nothing on the release</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>refused re-audit changed no global counter</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>reaudit_release of an unknown release id<div class="detail">[EXPECTED] release not found</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>audit_release of 1.4.3 again points to reaudit_release<div class="detail">[EXPECTED] this version is already audited as release #1; use reaudit_release</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#1): one recorded audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#1): it is the latest audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#1): offset past the end is empty</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#1): limit 0 returns no items</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#2): one recorded audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#2): it is the latest audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#2): offset past the end is empty</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#2): limit 0 returns no items</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#3): one recorded audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#3): it is the latest audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#3): offset past the end is empty</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#3): limit 0 returns no items</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits of an unknown release is refused<div class="detail">the call failed (Missing or invalid parameters.), but the RPC did not expose the contract's reason</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_package_releases: total and order (by audit order)</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_package_releases page 1 (offset 0, limit 2)</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_package_releases page 2 (offset 2, limit 2)</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_package_releases offset beyond the end is clamped and empty</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>walking one release per page visits each release exactly once</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_packages(offset, limit 1) returns exactly the base package</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_registrant_packages: exactly the four packages from this run</td></tr>
+</tbody></table></div>
+</section>
+<section><h2>Transactions</h2><ul><li>deploy: <a href="https://explorer-studio.genlayer.com/tx/0x03c5d001a622d0bee7a5aadabae6ede8c51d5b5891c120cf2f1a92df7f6ee401">0x03c5d001a622d0bee7a5aadabae6ede8c51d5b5891c120cf2f1a92df7f6ee401</a></li><li>register_package acme-widget npm https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures/: <a href="https://explorer-studio.genlayer.com/tx/0x1b17cb37c957a5b811b7e9e9246e10a9579ed89497e80892f5fc44228d145eba">0x1b17cb37c957a5b811b7e9e9246e10a9579ed89497e80892f5fc44228d145eba</a></li><li>exact duplicate is refused: <a href="https://explorer-studio.genlayer.com/tx/0xa4d7f00c27e732e4a7f605320ab5265fd38d87f267bb95a74d154506f99b8570">0xa4d7f00c27e732e4a7f605320ab5265fd38d87f267bb95a74d154506f99b8570</a></li><li>duplicate with different name case is refused: <a href="https://explorer-studio.genlayer.com/tx/0x8ea9a7ddaadb4a85e1ff453c1652d66b52bf1427fdbdb3af2e8d140571db5e2c">0x8ea9a7ddaadb4a85e1ff453c1652d66b52bf1427fdbdb3af2e8d140571db5e2c</a></li><li>duplicate with a padded, upper-case ecosystem is refused: <a href="https://explorer-studio.genlayer.com/tx/0xc4b0306d07db6b0d985dddc05db4b6282d1b6e9774e4731749b610d8afbca92b">0xc4b0306d07db6b0d985dddc05db4b6282d1b6e9774e4731749b610d8afbca92b</a></li><li>register_package acme-widget pypi https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures/: <a href="https://explorer-studio.genlayer.com/tx/0xcac16b0b42bc94ab3792a06d687fdf2a6daeaa8f92a3447f14bba1ebbec3c6d5">0xcac16b0b42bc94ab3792a06d687fdf2a6daeaa8f92a3447f14bba1ebbec3c6d5</a></li><li>register_package acme-widget npm https://github.com/acme/widget/: <a href="https://explorer-studio.genlayer.com/tx/0xf0c37a525531ddbf938e0dac44e99b4894f11911ed06ed7ac5a4c151855ab5c4">0xf0c37a525531ddbf938e0dac44e99b4894f11911ed06ed7ac5a4c151855ab5c4</a></li><li>register_package acme-widget other https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures: <a href="https://explorer-studio.genlayer.com/tx/0x98b194190d5b432aec03b06746ff3cb182c6196f62ceb2245c6820e28c668b61">0x98b194190d5b432aec03b06746ff3cb182c6196f62ceb2245c6820e28c668b61</a></li><li>name blank (&quot;&quot;): <a href="https://explorer-studio.genlayer.com/tx/0xe461c146b769f87ddde1ced68efe04ed9b2314b7150c158ad55e934b27d565e5">0xe461c146b769f87ddde1ced68efe04ed9b2314b7150c158ad55e934b27d565e5</a></li><li>name whitespace only (&quot;   &quot;): <a href="https://explorer-studio.genlayer.com/tx/0x04826896ddf3114a4217f0bdbcdf0e23de8740ea2a87e5c6b45f7f356a69d247">0x04826896ddf3114a4217f0bdbcdf0e23de8740ea2a87e5c6b45f7f356a69d247</a></li><li>ecosystem python (&quot;python&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x5029f81cb7638c96a07887939b14df14967b1c20f12d52d0029927f8e5dc7c24">0x5029f81cb7638c96a07887939b14df14967b1c20f12d52d0029927f8e5dc7c24</a></li><li>ecosystem unknown (&quot;unknown&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x34e6223df3ce6d7234c462ceb2343ffede59b327177c77fc64f44c3344ee2c52">0x34e6223df3ce6d7234c462ceb2343ffede59b327177c77fc64f44c3344ee2c52</a></li><li>source_prefix IPv4 literal (&quot;https://127.0.0.1/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x47ef9c11ffe30bb08d82c60ce302c20b0caee43bff8696e09e3ae2c1a588f736">0x47ef9c11ffe30bb08d82c60ce302c20b0caee43bff8696e09e3ae2c1a588f736</a></li><li>source_prefix cloud metadata address (&quot;https://169.254.169.254/latest/meta-data/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x40893be351eae7d3253a3debf448f996d180d8db6df4499e774bf54287b8bca6">0x40893be351eae7d3253a3debf448f996d180d8db6df4499e774bf54287b8bca6</a></li><li>audit_release: version lower than previous (1.4.3 -&gt; 1.4.2): <a href="https://explorer-studio.genlayer.com/tx/0xae55bb03c392d05d0a49c11e7ebe0c99a25495961cfa2302ad079aabd67b78bb">0xae55bb03c392d05d0a49c11e7ebe0c99a25495961cfa2302ad079aabd67b78bb</a></li><li>audit_release: version equal to previous (1.4.3 -&gt; 1.4.3): <a href="https://explorer-studio.genlayer.com/tx/0x7f5816c5d84d727cabd590a7c683ba780e7d25182980eee423e7db0a5f730d28">0x7f5816c5d84d727cabd590a7c683ba780e7d25182980eee423e7db0a5f730d28</a></li><li>audit_release: unknown package id: <a href="https://explorer-studio.genlayer.com/tx/0xb19c3ed9b296b5d4c3d5c698af807b4ea5dc5413971651a3d1339d6e87f3d361">0xb19c3ed9b296b5d4c3d5c698af807b4ea5dc5413971651a3d1339d6e87f3d361</a></li><li>notes_url plain http (&quot;http://raw.githubusercontent.com/reza9133/bu…&quot;): <a href="https://explorer-studio.genlayer.com/tx/0xbd5b4d7e91d81b697f2facfb23f283690187cf8ae5a1de117bd3e804c42d7af2">0xbd5b4d7e91d81b697f2facfb23f283690187cf8ae5a1de117bd3e804c42d7af2</a></li><li>notes_url IP literal (&quot;https://127.0.0.1/reza9133/bumpaudit/main/ex…&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x160b8029fb56ec02c9dfb843c9442c350c5fa86f997d8d20811c67356c4ae9c4">0x160b8029fb56ec02c9dfb843c9442c350c5fa86f997d8d20811c67356c4ae9c4</a></li><li>notes_url same host, outside the source prefix: <a href="https://explorer-studio.genlayer.com/tx/0x8f8c97669d6b4d6c400873660b0ebac81b51ae96f9856756cb96df3be24e596d">0x8f8c97669d6b4d6c400873660b0ebac81b51ae96f9856756cb96df3be24e596d</a></li><li>notes_url another host entirely: <a href="https://explorer-studio.genlayer.com/tx/0xb476bb273636f86c4dab639da819ad6bc6570df5a2a41385714ebb151eb5a57a">0xb476bb273636f86c4dab639da819ad6bc6570df5a2a41385714ebb151eb5a57a</a></li><li>path boundary: &lt;prefix&gt;-evil/ is outside a slash-less prefix: <a href="https://explorer-studio.genlayer.com/tx/0xf0e8986810e8d6346fa2ea5498febba3d224bafdae28d8e7ae5acb492657941c">0xf0e8986810e8d6346fa2ea5498febba3d224bafdae28d8e7ae5acb492657941c</a></li><li>path boundary: &lt;prefix&gt;evil/ is outside a slash-less prefix: <a href="https://explorer-studio.genlayer.com/tx/0x4a8aeb60920b6da5e9f7a5a9501f0581a6316f63ab35565febbc9802b6b17ff0">0x4a8aeb60920b6da5e9f7a5a9501f0581a6316f63ab35565febbc9802b6b17ff0</a></li><li>audit_release 1.4.2 -&gt; 1.4.3: <a href="https://explorer-studio.genlayer.com/tx/0xff11b7842f0c16d2365d5ece903e810899fa0f5d80230986b2fd39b57ded9f2d">0xff11b7842f0c16d2365d5ece903e810899fa0f5d80230986b2fd39b57ded9f2d</a></li><li>audit_release 1.4.3 -&gt; 1.5.0: <a href="https://explorer-studio.genlayer.com/tx/0xfcfe24bbf55e42bef7992746f935a2b91dee3d9bab376a48f1edbc50be20a660">0xfcfe24bbf55e42bef7992746f935a2b91dee3d9bab376a48f1edbc50be20a660</a></li><li>audit_release 1.5.0 -&gt; 2.0.0: <a href="https://explorer-studio.genlayer.com/tx/0xcca57354356c512bc92ef6dddd6c085b6f85abe83bf1e32cf7470dca1b09ba37">0xcca57354356c512bc92ef6dddd6c085b6f85abe83bf1e32cf7470dca1b09ba37</a></li><li>reaudit_release #3 straight after its audit: <a href="https://explorer-studio.genlayer.com/tx/0x73cfcd8b2b54bc0730494dbaf3787488500ff6a8d1d709f395a481ccb513384e">0x73cfcd8b2b54bc0730494dbaf3787488500ff6a8d1d709f395a481ccb513384e</a></li><li>reaudit_release of an unknown release id: <a href="https://explorer-studio.genlayer.com/tx/0x0d382b20e69ca8270f52d6d89c48c5439a1db6c2565c266fcf3a68afb9a744d9">0x0d382b20e69ca8270f52d6d89c48c5439a1db6c2565c266fcf3a68afb9a744d9</a></li><li>audit_release of 1.4.3 again points to reaudit_release: <a href="https://explorer-studio.genlayer.com/tx/0x1224e013ec068341a292768e6582e52f497fc80d9bc10a3efd1afc54632dd7f9">0x1224e013ec068341a292768e6582e52f497fc80d9bc10a3efd1afc54632dd7f9</a></li></ul></section>
+</body></html>

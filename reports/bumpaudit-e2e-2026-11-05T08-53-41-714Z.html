@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BumpAudit live E2E report · FAIL</title>
+<style>
+:root{--bg:#fff;--fg:#1c1f24;--muted:#5c6570;--line:#dde1e6;--ok:#15803d;--no:#b91c1c;--okbg:#e8f6ed;--nobg:#fdecec;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--bg:#14171a;--fg:#e6e9ec;--muted:#9aa4ae;--line:#2c3238;--ok:#4ade80;--no:#f87171;--okbg:#14291c;--nobg:#2e1717}}
+body{margin:0;padding:24px;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,sans-serif;max-width:960px;margin-inline:auto}
+h1{margin:0 0 4px}h2{font-size:1.05rem;margin:28px 0 4px}.muted{color:var(--muted);margin:0 0 8px}
+.pill{display:inline-block;padding:1px 9px;border-radius:999px;font-size:.8rem;font-weight:600}
+.pill.pass{background:var(--okbg);color:var(--ok)}.pill.fail{background:var(--nobg);color:var(--no)}
+.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%}td{padding:5px 8px;border-top:1px solid var(--line);vertical-align:top}
+.mark{width:2.5em;font-family:ui-monospace,monospace;font-weight:600}tr.ok .mark{color:var(--ok)}tr.no{background:var(--nobg)}tr.no .mark{color:var(--no)}
+.detail{color:var(--muted);font-size:.85rem;font-family:ui-monospace,monospace;word-break:break-word}.note{color:var(--muted);font-size:.9rem}
+dl{display:grid;grid-template-columns:max-content 1fr;gap:2px 16px;font-size:.9rem}dt{color:var(--muted)}dd{margin:0;word-break:break-all}
+</style></head><body>
+<h1>BumpAudit live E2E report</h1>
+<p><span class="pill fail">FAIL</span> 52 of 117 checks passed, 65 failed · 5 scenario(s) · 1055s</p>
+<dl><dt>contract</dt><dd>0x5F72c90ab888170F03767571499E0b89594E55C9</dd><dt>account</dt><dd>0xD8E8C0a6D43354F09E2CbABA26bb65685C5FfdC6</dd><dt>network</dt><dd>GenLayer Studionet</dd><dt>fixture base</dt><dd>https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures</dd><dt>package name</dt><dd>acme-widget</dd><dt>started</dt><dd>2026-11-05T08:36:06.721Z</dd><dt>finished</dt><dd>2026-11-05T08:53:41.713Z</dd></dl>
+<section><h2><span class="pill fail">FAIL</span> 0. Preflight</h2>
+<p class="muted">4/6 checks · 13.2s</p>
+<div class="scroll"><table><tbody>
+<tr class="no"><td class="mark">no</td><td>account funded through sim_fundAccount<div class="detail">An unknown RPC error occurred.
+
+Details: fetch failed
+Version: viem@2.57.16</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>contract answers get_version<div class="detail">got &quot;1.0.0&quot;</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_limits reports the 300 s re-audit cooldown<div class="detail">got 300</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>npm and pypi are supported ecosystems</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>fresh deployment starts empty</td></tr>
+<tr class="no"><td class="mark">no</td><td>fixture is publicly reachable (https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures/CHANGELOG.md)<div class="detail">fetch failed</div></td></tr>
+</tbody></table></div>
+<p class="note">deployed a fresh contract at 0x5F72c90ab888170F03767571499E0b89594E55C9</p></section>
+<section><h2><span class="pill fail">FAIL</span> 1. Basics and registration</h2>
+<p class="muted">11/15 checks · 69.3s</p>
+<div class="scroll"><table><tbody>
+<tr class="ok"><td class="mark">ok</td><td>first package id is sequential</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: name</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: ecosystem</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: source_prefix keeps the trailing slash</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: registrant is the sender</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: fresh counters</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: no integrity score before any judgement</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_package: created_at is set<div class="detail">got 1793867781</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_stats: packages +1</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_stats: releases and audits untouched</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>find_packages lists the new package<div class="detail">[1]</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>exact duplicate is refused<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.
+
+Details: fetch failed
+Version: viem@2.57.16</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>duplicate with different name case is refused<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>duplicate with a padded, upper-case ecosystem is refused<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>scenario aborted: An unknown RPC error occurred.
+
+Details: fetch failed
+Version: viem@2.57.16</td></tr>
+</tbody></table></div>
+</section>
+<section><h2><span class="pill fail">FAIL</span> 2. Adversarial input validation</h2>
+<p class="muted">14/63 checks · 853.1s</p>
+<div class="scroll"><table><tbody>
+<tr class="no"><td class="mark">no</td><td>boundary package registered (prefix without trailing slash)<div class="detail">expected 4, got 2</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>its prefix is stored as given</td></tr>
+<tr class="no"><td class="mark">no</td><td>name blank (&quot;&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>name whitespace only (&quot;   &quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>name 81 characters (limit is 80) (&quot;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa…&quot;)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>name space inside (&quot;acme widget&quot;)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>name shell/markup characters (&quot;acme&lt;script&gt;$(rm -rf)&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>name exclamation mark (&quot;acme-widget!&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>name leading dash (&quot;-acme&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>name leading dot / path traversal (&quot;../../etc/passwd&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>name only punctuation (&quot;@/+&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>name non-ASCII look-alike (&quot;acme-wïdget&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>name right-to-left override (&quot;acme‮tegdiw&quot;)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>ecosystem python (&quot;python&quot;)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>ecosystem unknown (&quot;unknown&quot;)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>ecosystem empty (&quot;&quot;)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>ecosystem injection attempt (&quot;npm; DROP&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix IPv4 literal (&quot;https://127.0.0.1/&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix cloud metadata address (&quot;https://169.254.169.254/latest/meta-data/&quot;)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.
+
+Details: fetch failed
+Version: viem@2.57.16</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix plain http (&quot;http://github.com/acme/widget/&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix credentials in the URL (&quot;https://u:p@github.com/acme/widget/&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix non-standard port (&quot;https://github.com:8443/acme/widget/&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix dot-dot path traversal (&quot;https://github.com/acme/../widget/&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix localhost (no dot) (&quot;https://localhost/acme/&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix IPv6 literal (&quot;https://[::1]/acme/&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix hex-looking IP (&quot;https://0x7f.0.0.1/acme/&quot;)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.
+
+Details: fetch failed
+Version: viem@2.57.16</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix internal suffix (&quot;https://build.internal/acme/&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix wildcard DNS (nip.io) (&quot;https://10.0.0.1.nip.io/acme/&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix host only, no path (&quot;https://github.com/&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix query string (&quot;https://github.com/acme/widget/?ref=main&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>source_prefix javascript: scheme (&quot;javascript:alert(1)&quot;)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.
+
+Details: fetch failed
+Version: viem@2.57.16</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url also rejects IPv4 literal<div class="detail">{&quot;canonical&quot;:&quot;&quot;,&quot;valid&quot;:false}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url also rejects cloud metadata address<div class="detail">{&quot;canonical&quot;:&quot;&quot;,&quot;valid&quot;:false}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url also rejects plain http<div class="detail">{&quot;canonical&quot;:&quot;&quot;,&quot;valid&quot;:false}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url also rejects credentials in the URL<div class="detail">{&quot;canonical&quot;:&quot;&quot;,&quot;valid&quot;:false}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url also rejects non-standard port<div class="detail">{&quot;canonical&quot;:&quot;&quot;,&quot;valid&quot;:false}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url also rejects dot-dot path traversal<div class="detail">{&quot;canonical&quot;:&quot;&quot;,&quot;valid&quot;:false}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url also rejects localhost (no dot)<div class="detail">{&quot;canonical&quot;:&quot;&quot;,&quot;valid&quot;:false}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url also rejects IPv6 literal<div class="detail">{&quot;canonical&quot;:&quot;&quot;,&quot;valid&quot;:false}</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>check_source_url accepts the real fixture prefix<div class="detail">{&quot;canonical&quot;:&quot;https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures/&quot;,&quot;valid&quot;:true}</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release: version lower than previous (1.4.3 -&gt; 1.4.2)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release: version equal to previous (1.4.3 -&gt; 1.4.3)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.
+
+Details: fetch failed
+Version: viem@2.57.16</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release: version is 'latest' (1.4.3 -&gt; latest)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release: version has two parts (1.4.3 -&gt; 1.5)<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.
+
+Details: fetch failed
+Version: viem@2.57.16</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release: version has a leading zero (1.4.3 -&gt; 01.5.0)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release: previous_version is 'main' (main -&gt; 1.5.0)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release: previous_version has four parts (1.4.3.1 -&gt; 1.5.0)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release: previous_version is a pre-release (1.4.3-rc.1 -&gt; 1.5.0)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release: unknown package id<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>notes_url plain http (&quot;http://raw.githubusercontent.com/reza9133/bu…&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>notes_url IP literal (&quot;https://127.0.0.1/reza9133/bumpaudit/main/ex…&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>notes_url credentials (&quot;https://u:p@raw.githubusercontent.com/reza91…&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>notes_url non-standard port :8443 (&quot;https://raw.githubusercontent.com:8443/reza9…&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>notes_url path traversal ../ (&quot;https://raw.githubusercontent.com/reza9133/b…&quot;)<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>notes_url same host, outside the source prefix<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>notes_url another host entirely<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>notes_url sibling folder that merely starts with the prefix text<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>path boundary: &lt;prefix&gt;-evil/ is outside a slash-less prefix<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>path boundary: &lt;prefix&gt;evil/ is outside a slash-less prefix<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_stats identical after every rejected call</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>base package record identical after every rejected call</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>this account's package list is unchanged</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>no release was created by rejected audits</td></tr>
+</tbody></table></div>
+</section>
+<section><h2><span class="pill fail">FAIL</span> 3. Live AI consensus and semantic auditing</h2>
+<p class="muted">18/22 checks · 58.0s</p>
+<div class="scroll"><table><tbody>
+<tr class="ok"><td class="mark">ok</td><td>audit_release 1.4.2 -&gt; 1.4.3 was accepted by consensus</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: verdict</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: severity</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: declared bump</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: required bump</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: release record agrees with the audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: release bookkeeping</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: the notes were read (entries found)<div class="detail">item_count 4</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: at least one entry classified breaking<div class="detail">breaking_entries 1</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: evidence is present (max 3 entries)<div class="detail">1 item(s)</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: evidence quotes &quot;--legacy&quot;<div class="detail">[&quot;Removed the deprecated `--legacy` flag. Scripts that still pass it now fail.&quot;]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: every evidence quote is verbatim in the stored release section<div class="detail">[&quot;Removed the deprecated `--legacy` flag. Scripts that still pass it now fail.&quot;]</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: block hash is a Keccak-256 hex digest<div class="detail">521f84e0c0f18a76f071943709d56780e932204fc838c2985ce69a0c15a074e1</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: block hash is recorded on the release and in the notes view</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: stored section is this release's section only<div class="detail">block of 157 chars</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: no prompt-injection warning on clean notes</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>1.4.2 -&gt; 1.4.3: package counters after this audit</td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release 1.4.3 -&gt; 1.5.0 was accepted by consensus<div class="detail">An unknown RPC error occurred.
+
+Details: fetch failed
+Version: viem@2.57.16</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release 1.5.0 -&gt; 2.0.0 was accepted by consensus<div class="detail">An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>all three audits completed, so integrity can be judged<div class="detail">1 of 3 audits completed</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>get_stats deltas: +3 releases, +3 audits, +2 compliant, +1 under-bumped</td></tr>
+<tr class="no"><td class="mark">no</td><td>global integrity_permille on a fresh contract is 666<div class="detail">expected 666, got 0</div></td></tr>
+</tbody></table></div>
+</section>
+<section><h2><span class="pill fail">FAIL</span> 4. Re-audit, cooldown and history paging</h2>
+<p class="muted">5/11 checks · 61.4s</p>
+<div class="scroll"><table><tbody>
+<tr class="no"><td class="mark">no</td><td>reaudit_release #1 straight after its audit is refused (cooldown 300s)<div class="detail">it was ACCEPTED only ~67s after the audit</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>reaudit_release of an unknown release id<div class="detail">reverted without an [EXPECTED] tag (tag=none): An unknown RPC error occurred.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>audit_release of 1.4.3 again points to reaudit_release<div class="detail">the transaction was ACCEPTED but had to revert</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#1): one recorded audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#1): it is the latest audit</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#1): offset past the end is empty</td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_release_audits(#1): limit 0 returns no items</td></tr>
+<tr class="no"><td class="mark">no</td><td>list_release_audits of an unknown release is refused<div class="detail">Missing or invalid parameters.
+Double check you have provided the correct parameters.</div></td></tr>
+<tr class="no"><td class="mark">no</td><td>enough releases exist to test pagination<div class="detail">1 release(s) audited</div></td></tr>
+<tr class="ok"><td class="mark">ok</td><td>list_packages(offset, limit 1) returns exactly the base package</td></tr>
+<tr class="no"><td class="mark">no</td><td>list_registrant_packages: exactly the four packages from this run<div class="detail">expected [1,null,null,2], got [1,2]</div></td></tr>
+</tbody></table></div>
+</section>
+<section><h2>Transactions</h2><ul><li>deploy: <a href="https://explorer-studio.genlayer.com/tx/0x21d17bbc8f1c850be4e65716344342f136f28d67f3e36df13681ed9df04a34a7">0x21d17bbc8f1c850be4e65716344342f136f28d67f3e36df13681ed9df04a34a7</a></li><li>register_package acme-widget npm https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures/: <a href="https://explorer-studio.genlayer.com/tx/0xbfd145fd6f46bc90f3f3516d4084e4d3df21a0f2a0b5db45ab8a33268ae3dfea">0xbfd145fd6f46bc90f3f3516d4084e4d3df21a0f2a0b5db45ab8a33268ae3dfea</a></li><li>register_package acme-widget other https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures: <a href="https://explorer-studio.genlayer.com/tx/0x3070b0e56d19510b4ff7862e022c1fd68ddcb248d7e05d1490c3de08bd9f2468">0x3070b0e56d19510b4ff7862e022c1fd68ddcb248d7e05d1490c3de08bd9f2468</a></li><li>name blank (&quot;&quot;): <a href="https://explorer-studio.genlayer.com/tx/0xf63aace6e41ddd13c707d476dbe26ad3026189d11112caa6419ade4a070aff15">0xf63aace6e41ddd13c707d476dbe26ad3026189d11112caa6419ade4a070aff15</a></li><li>name whitespace only (&quot;   &quot;): <a href="https://explorer-studio.genlayer.com/tx/0x441e93d983e313524eecf353d1ade2828fbeceb243ae5813e153397eb3d3bd66">0x441e93d983e313524eecf353d1ade2828fbeceb243ae5813e153397eb3d3bd66</a></li><li>name shell/markup characters (&quot;acme&lt;script&gt;$(rm -rf)&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x1a48f0766fa600efd95aa0ed303ff2ec553a568f02014191e2b6261d58f959ec">0x1a48f0766fa600efd95aa0ed303ff2ec553a568f02014191e2b6261d58f959ec</a></li><li>name exclamation mark (&quot;acme-widget!&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x3a31b99dd9492e8da2824c41fe1c007e4597909262d90524a755a32980e827e5">0x3a31b99dd9492e8da2824c41fe1c007e4597909262d90524a755a32980e827e5</a></li><li>name leading dash (&quot;-acme&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x498b073032e82ebd629ef433cb221029332b030969eacb3dabbe42a91fc92e18">0x498b073032e82ebd629ef433cb221029332b030969eacb3dabbe42a91fc92e18</a></li><li>name leading dot / path traversal (&quot;../../etc/passwd&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x9793f2aba32c4c3e91782712368eff33c43241f808bb4d302ed1cc5da4c624ef">0x9793f2aba32c4c3e91782712368eff33c43241f808bb4d302ed1cc5da4c624ef</a></li><li>name only punctuation (&quot;@/+&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x3309641e2b5b439517fe190b4e5fb2b6fdcf7921edcfd16600491cb56111981d">0x3309641e2b5b439517fe190b4e5fb2b6fdcf7921edcfd16600491cb56111981d</a></li><li>name non-ASCII look-alike (&quot;acme-wïdget&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x82e156530e518ff34ce2eb514c41cb6e8916c5ddfbb26a4248c36a779f7ac704">0x82e156530e518ff34ce2eb514c41cb6e8916c5ddfbb26a4248c36a779f7ac704</a></li><li>ecosystem injection attempt (&quot;npm; DROP&quot;): <a href="https://explorer-studio.genlayer.com/tx/0xc8c05252a5f1d0641c8950a1edb62bad68d9bef6bd1214e45d7917b3108502d1">0xc8c05252a5f1d0641c8950a1edb62bad68d9bef6bd1214e45d7917b3108502d1</a></li><li>source_prefix IPv4 literal (&quot;https://127.0.0.1/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x17770f50af098b41b28bd70c9c60bf013cd74cce6707f535c0328757a5d4d69b">0x17770f50af098b41b28bd70c9c60bf013cd74cce6707f535c0328757a5d4d69b</a></li><li>source_prefix plain http (&quot;http://github.com/acme/widget/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0xc666ce6d64ab2804f74f7ecdd913b5dc850dbf60d24ebd66c64b3e8973311e39">0xc666ce6d64ab2804f74f7ecdd913b5dc850dbf60d24ebd66c64b3e8973311e39</a></li><li>source_prefix credentials in the URL (&quot;https://u:p@github.com/acme/widget/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x66a8ac3ae4a4d5dd38091a71feaf8f7da7cec09f10c3eff1e90cd93451b06f1f">0x66a8ac3ae4a4d5dd38091a71feaf8f7da7cec09f10c3eff1e90cd93451b06f1f</a></li><li>source_prefix non-standard port (&quot;https://github.com:8443/acme/widget/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0xd09a83593eff2512bde64f4482a55cfc1b2ca379968c8e53c3f85eeb148aead6">0xd09a83593eff2512bde64f4482a55cfc1b2ca379968c8e53c3f85eeb148aead6</a></li><li>source_prefix dot-dot path traversal (&quot;https://github.com/acme/../widget/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x8e0176a0a801bf6c892d87e6ddfd6849eec28a5ee819789376673b55c94dc9ee">0x8e0176a0a801bf6c892d87e6ddfd6849eec28a5ee819789376673b55c94dc9ee</a></li><li>source_prefix localhost (no dot) (&quot;https://localhost/acme/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0xd2347fdaccfd143b8190e1252f37d017ee45db15bd90a3250db3a7498df945fe">0xd2347fdaccfd143b8190e1252f37d017ee45db15bd90a3250db3a7498df945fe</a></li><li>source_prefix IPv6 literal (&quot;https://[::1]/acme/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x283e0cb7eb3255cac03bf45e624b7ee41253ba1d95ff8805db7fdf22f35116f2">0x283e0cb7eb3255cac03bf45e624b7ee41253ba1d95ff8805db7fdf22f35116f2</a></li><li>source_prefix internal suffix (&quot;https://build.internal/acme/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x855c9fed7bdf63b8df9dab3d4d96d802832fd9c319a2959e4c3019028839064d">0x855c9fed7bdf63b8df9dab3d4d96d802832fd9c319a2959e4c3019028839064d</a></li><li>source_prefix wildcard DNS (nip.io) (&quot;https://10.0.0.1.nip.io/acme/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x47d2a2eb7ccb21413116e5b2e0f627af3829693b7119cfeaf31f69cb6fa37c74">0x47d2a2eb7ccb21413116e5b2e0f627af3829693b7119cfeaf31f69cb6fa37c74</a></li><li>source_prefix host only, no path (&quot;https://github.com/&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x90fbf322fadf96e64ed86a552af9d0c3631b83cc4253909caa5a6c7179ba2442">0x90fbf322fadf96e64ed86a552af9d0c3631b83cc4253909caa5a6c7179ba2442</a></li><li>source_prefix query string (&quot;https://github.com/acme/widget/?ref=main&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x798be6214d5a9a6cf6183066696b71e83d710a51d43bddca025bfb7b1e709bd1">0x798be6214d5a9a6cf6183066696b71e83d710a51d43bddca025bfb7b1e709bd1</a></li><li>audit_release: version lower than previous (1.4.3 -&gt; 1.4.2): <a href="https://explorer-studio.genlayer.com/tx/0x03cf3f960496c203e0d526a0053062150c299e28b9a214fb5d088e4a9f4be9cb">0x03cf3f960496c203e0d526a0053062150c299e28b9a214fb5d088e4a9f4be9cb</a></li><li>audit_release: version has a leading zero (1.4.3 -&gt; 01.5.0): <a href="https://explorer-studio.genlayer.com/tx/0x6d8d4a2ea4fb8d63e1ff610fdb8fda005d5f2263eb4cc1418038b2463e3eb146">0x6d8d4a2ea4fb8d63e1ff610fdb8fda005d5f2263eb4cc1418038b2463e3eb146</a></li><li>audit_release: previous_version is 'main' (main -&gt; 1.5.0): <a href="https://explorer-studio.genlayer.com/tx/0x97e6183bbac152d72dcf8334af781247fc8fdb949bbdd476114b7623b40673ed">0x97e6183bbac152d72dcf8334af781247fc8fdb949bbdd476114b7623b40673ed</a></li><li>audit_release: previous_version has four parts (1.4.3.1 -&gt; 1.5.0): <a href="https://explorer-studio.genlayer.com/tx/0xe566b1e6c6c814babdb639190ada4312d2fbe9d080f7b26568ec9339475921a4">0xe566b1e6c6c814babdb639190ada4312d2fbe9d080f7b26568ec9339475921a4</a></li><li>audit_release: previous_version is a pre-release (1.4.3-rc.1 -&gt; 1.5.0): <a href="https://explorer-studio.genlayer.com/tx/0x4f56257ea6430bcd8120c4a2e27232024d131f907538fa955bd9e3a8c6f016a8">0x4f56257ea6430bcd8120c4a2e27232024d131f907538fa955bd9e3a8c6f016a8</a></li><li>notes_url plain http (&quot;http://raw.githubusercontent.com/reza9133/bu…&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x911193f03010006a288408fd2b21800e37377f3825183619aa7a98ee5a24e3a0">0x911193f03010006a288408fd2b21800e37377f3825183619aa7a98ee5a24e3a0</a></li><li>notes_url IP literal (&quot;https://127.0.0.1/reza9133/bumpaudit/main/ex…&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x3da72c38d8a0c63a58a1297706eeb4e427d5a16ce7f4246428d76e216baa233a">0x3da72c38d8a0c63a58a1297706eeb4e427d5a16ce7f4246428d76e216baa233a</a></li><li>notes_url credentials (&quot;https://u:p@raw.githubusercontent.com/reza91…&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x113961a879b0681bce3d51159a3c753264dac8461b2498d79fb303326a10f84f">0x113961a879b0681bce3d51159a3c753264dac8461b2498d79fb303326a10f84f</a></li><li>notes_url non-standard port :8443 (&quot;https://raw.githubusercontent.com:8443/reza9…&quot;): <a href="https://explorer-studio.genlayer.com/tx/0xe20ad187441a1a59307a1a568cef4aff195f81c85a9f635813aa1137456c5141">0xe20ad187441a1a59307a1a568cef4aff195f81c85a9f635813aa1137456c5141</a></li><li>notes_url path traversal ../ (&quot;https://raw.githubusercontent.com/reza9133/b…&quot;): <a href="https://explorer-studio.genlayer.com/tx/0x079539cda99838dba37bb747f46d2a602898d823cfeaa0c8e8434f7e155f566a">0x079539cda99838dba37bb747f46d2a602898d823cfeaa0c8e8434f7e155f566a</a></li><li>notes_url another host entirely: <a href="https://explorer-studio.genlayer.com/tx/0xbea8d60516260ce483ad1393c2544028f36c31afee00dc015b668d3eef914b11">0xbea8d60516260ce483ad1393c2544028f36c31afee00dc015b668d3eef914b11</a></li><li>notes_url sibling folder that merely starts with the prefix text: <a href="https://explorer-studio.genlayer.com/tx/0xc07bcd4ca2f29c05477593d1d67292a780b00c8de8e3e7fdd873a31591455f65">0xc07bcd4ca2f29c05477593d1d67292a780b00c8de8e3e7fdd873a31591455f65</a></li><li>path boundary: &lt;prefix&gt;-evil/ is outside a slash-less prefix: <a href="https://explorer-studio.genlayer.com/tx/0x289b846c30abdde0f1bc2805636ffde55e00f3524b94d1dc066e627b65cbf1a7">0x289b846c30abdde0f1bc2805636ffde55e00f3524b94d1dc066e627b65cbf1a7</a></li><li>audit_release 1.4.2 -&gt; 1.4.3: <a href="https://explorer-studio.genlayer.com/tx/0x371fb036eb0f9376d3688bcac43313fe33923883173e0ffe0c2ea2dcae750b94">0x371fb036eb0f9376d3688bcac43313fe33923883173e0ffe0c2ea2dcae750b94</a></li><li>reaudit_release #1 straight after its audit: <a href="https://explorer-studio.genlayer.com/tx/0xb7538084a1070d198a4d819c30950ca755f7cb50dd7b68efd6c2b9b7dc17f3a7">0xb7538084a1070d198a4d819c30950ca755f7cb50dd7b68efd6c2b9b7dc17f3a7</a></li><li>audit_release of 1.4.3 again points to reaudit_release: <a href="https://explorer-studio.genlayer.com/tx/0xc10cfe1bcf8baaf00187226b0c44b83b14832530514b894d3d7ac3d9e7e1e72c">0xc10cfe1bcf8baaf00187226b0c44b83b14832530514b894d3d7ac3d9e7e1e72c</a></li></ul></section>
+</body></html>
