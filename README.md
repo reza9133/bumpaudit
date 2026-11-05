@@ -198,6 +198,23 @@ The tests only use the direct-mode API that `genlayer-test` provides (`direct_vm
 `mock_llm`, `run_validator`, ...). A few tests use emulator-only introspection (`vm.events`, `vm.llm_prompts`) and skip
 themselves when the harness does not expose it.
 
+### Live end-to-end test on Studionet
+
+```bash
+npm install
+npm run test:live       # scripts/e2e.mjs: real transactions, real validator consensus
+npm run test:all        # static checks + local suites + the live run   (SKIP_LOCAL=1 / SKIP_LIVE=1 / BA_E2E_QUICK=1)
+```
+
+`scripts/e2e.mjs` registers packages, throws ~50 hostile inputs at the contract (bad names and ecosystems, SSRF-style URLs,
+SemVer violations, a prefix-boundary escape) and requires each to revert with an `[EXPECTED]` tag without changing any state,
+then audits the three fixture releases through live consensus (UNDER_BUMPED / COMPLIANT / COMPLIANT, integrity 666 / 1000)
+and checks the re-audit cooldown and every paginated view. It needs the fixture to be public: it uses
+`https://raw.githubusercontent.com/reza9133/bumpaudit/main/examples/fixtures` unless `BA_FIXTURE_BASE` says otherwise.
+Each run writes `reports/bumpaudit-e2e-<timestamp>.{html,md,json}` plus `reports/bumpaudit-e2e-summary.md` and exits non-zero on
+any failed check. Set `BA_CONTRACT_ADDRESS` to reuse a deployment (ids are then checked relative to what is already stored).
+Expect 15-30 minutes: every rejected call is a transaction, and the public RPC allows about 30 requests a minute.
+
 ### Offline emulator
 
 `tools/offline_sim` and `tools/offline_pytest` are a strict, offline stand-in for the SDK and for pytest, used to develop the
@@ -266,6 +283,7 @@ contracts/bump_audit.py        the Intelligent Contract (single file)
 tests/contract/                direct-mode tests, fixtures and shared helpers
 examples/fixtures/             demo changelog used by `npm run demo` and by a test
 scripts/deploy.mjs, demo.mjs   live Studionet scripts (+ lib.mjs, throttle.mjs, util.mjs and its tests)
+scripts/e2e.mjs, report.mjs    live adversarial end-to-end runner and its report writer; run-all.sh runs everything
 scripts/mutation_check.py      mutation testing
 tools/offline_sim, offline_pytest   strict offline stand-ins for the SDK and pytest
 docs/DESIGN.md                 protocol, threat model, rejected alternatives
