@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { describeAudit, findAddress, normalize, parseArgs, receiptFailed, taggedMessage } from "./util.mjs";
+import { describeAudit, findAddress, normalize, parseArgs, receiptFailed, taggedKind, taggedMessage } from "./util.mjs";
 
 test("normalize turns Maps, BigInts and 20-byte arrays into plain values", () => {
   const input = new Map([["id", 7n], ["owner", new Uint8Array(20).fill(0xab)], ["big", 2n ** 70n], ["list", [new Map([["x", 1n]])]]]);
@@ -53,4 +53,11 @@ test("describeAudit prints verdict, evidence and warnings", () => {
   for (const part of ["UNDER_BUMPED", "declared bump PATCH", "#2 \"BREAKING CHANGE: x\"", "tries to address", "EDITED", "SOFTENED"]) {
     assert.ok(text.includes(part), part);
   }
+});
+
+test("taggedKind tells EXPECTED reverts from EXTERNAL ones", () => {
+  assert.equal(taggedKind({ a: [{ b: 'VM error: "[EXPECTED] package not found"' }] }), "EXPECTED");
+  assert.equal(taggedKind("x [EXTERNAL] notes_url could not be fetched"), "EXTERNAL");
+  assert.equal(taggedKind({ nothing: ["tagged"] }), null);
+  assert.equal(taggedKind(undefined), null);
 });

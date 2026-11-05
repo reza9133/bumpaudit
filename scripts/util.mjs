@@ -41,6 +41,29 @@ export function taggedMessage(value, depth = 0) {
   return null;
 }
 
+/** Which tag the contract put on a revert: "EXPECTED" (input rejected by design), "EXTERNAL" (the outside world failed) or null. */
+export function taggedKind(value, depth = 0) {
+  if (depth > 7 || value == null) return null;
+  if (typeof value === "string") {
+    const match = value.match(/\[(EXPECTED|EXTERNAL)\]/);
+    return match ? match[1] : null;
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const found = taggedKind(item, depth + 1);
+      if (found) return found;
+    }
+    return null;
+  }
+  if (typeof value === "object") {
+    for (const item of Object.values(value)) {
+      const found = taggedKind(item, depth + 1);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
 const ADDRESS = /^0x[0-9a-fA-F]{40}$/;
 
 export function findAddress(value, depth = 0) {

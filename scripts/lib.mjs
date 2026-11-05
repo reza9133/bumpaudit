@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { createAccount, createClient, generatePrivateKey } from "genlayer-js";
 import { studionet } from "genlayer-js/chains";
 import { TransactionStatus } from "genlayer-js/types";
-import { findAddress, normalize, receiptFailed, taggedMessage } from "./util.mjs";
+import { findAddress, normalize, receiptFailed, taggedKind, taggedMessage } from "./util.mjs";
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const CONTRACT_PATH = resolve(ROOT, "contracts", "bump_audit.py");
@@ -43,16 +43,27 @@ export async function view(client, address, functionName, args = []) {
   return normalize(await client.readContract({ address, functionName, args }));
 }
 
-/** Sends a write transaction and waits until validators accepted it. Throws the contract's own error text on a revert. */
+/**
+ * Sends a write transaction and waits until validators accepted it.
+ * Throws the contract's own error text on a revert; the thrown Error also carries `.tag`
+ * ("EXPECTED" | "EXTERNAL" | null) and, when the transaction got that far, `.hash`.
+ */
 export async function send(client, address, functionName, args, log = console.log) {
   let hash;
   try {
     hash = await client.writeContract({ address, functionName, args, value: 0n });
   } catch (err) {
-    throw new Error(taggedMessage(err) ?? String(err?.shortMessage ?? err?.message ?? err));
+    const failure = new Error(taggedMessage(err) ?? String(err?.shortMessage ?? err?.message ?? err));
+    failure.tag = taggedKind(err);
+    throw failure;
   }
   log(`  tx ${hash}  (validators are reading the page and classifying; this can take a minute or two)`);
   const receipt = await client.waitForTransactionReceipt({ hash, status: TransactionStatus.ACCEPTED, interval: 5000, retries: 200 });
-  if (receiptFailed(receipt)) throw new Error(taggedMessage(receipt) ?? "the contract reverted (see the explorer for the reason)");
+  if (receiptFailed(receipt)) {
+    const failure = new Error(taggedMessage(receipt) ?? "the contract reverted (see the explorer for the reason)");
+    failure.tag = taggedKind(receipt);
+    failure.hash = hash;
+    throw failure;
+  }
   return { hash, receipt };
 }
