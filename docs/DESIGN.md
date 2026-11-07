@@ -88,7 +88,7 @@ changes (and the cap of 30 leaves an unmistakable trace if a maintainer flips th
 | Edit after the fact | stored section + hash; edit / soften flags; recheck cannot change URL | the page may be edited before the first audit |
 | Slot exhaustion | rechecks consume nothing; caps apply to real changes | a maintainer flipping notes 30 times is visible, not prevented |
 | Spam / storage growth | caps per address, package and release; sections capped at 6000 chars | Sybil addresses (cost is the attacker's fee on a real network) |
-| Non-determinism between nodes | no floats, regexes, dict/set iteration order dependence, or storage access inside non-deterministic blocks | untested against the real VM, see below |
+| Non-determinism between nodes | no floats, regexes, dict/set iteration order dependence, or storage access inside non-deterministic blocks | exercised by the live Studionet run on the demo fixture (see `reports/`); other pages are not covered by a recorded run |
 
 ## 7. Rejected alternatives
 
@@ -109,7 +109,7 @@ changes (and the cap of 30 leaves an unmistakable trace if a maintainer flips th
 | No unexpected exception on any input | fuzz tests: random pages, model answers, versions, URLs and forged leader results only ever produce a tagged revert or a bool |
 | Tests really detect bugs | mutation testing: ~220 injected bugs, all killed except 4 documented equivalent mutants |
 | Contract uses only SDK constructs known to work on Studionet | the same API surface as the live-verified PromiseLedger, plus AST checks (`tests/contract/test_hygiene.py`) |
-| Runs under the real GenVM / real validators | **not verified by the author**; run `npm run demo` |
+| Runs under the real GenVM / real validators | verified on Studionet on 2026-11-05 against the demo fixture (131/131 checks, `reports/`); re-run `npm run test:live` for your own deployment |
 
 During development the tests ran on a strict offline emulator (`tools/offline_sim`) because `genlayer-test` could not be
 installed there. It is stricter than GenVM in several places but it is not GenVM: run `pytest` with `genlayer-test` and a live
