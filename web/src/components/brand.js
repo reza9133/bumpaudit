@@ -34,8 +34,39 @@ const full = import.meta.glob("../assets/mochi.{png,webp,jpg,jpeg,svg}", { eager
 const head = import.meta.glob("../assets/mochi-head.{png,webp,jpg,jpeg,svg}", { eager: true, query: "?url", import: "default" });
 const customUrl = Object.values(full)[0] || null;
 const headUrl = Object.values(head)[0] || customUrl;
-const FULL_RATIO = 619 / 960; // width / height of mochi.png
-const HEAD_MAX = 100; // at or below this size the close-up is shown, above it the full figure
+const FULL = { w: 619, h: 960, cx: 332.5, cy: 201.5, k: 107 / 160 }; // mochi.png: eye midpoint and scale (eye span = 160 units)
+const HEAD = { w: 440, h: 449, cx: 240, cy: 305, k: 1 }; // mochi-head.png
+const HEAD_MAX = 120; // at or below this size the close-up is shown, above it the full figure
+
+// The artwork has one expression. For every other mood a patch covers the original eyes and mouth on the
+// visor and the mood's face is drawn on top, in the same units (origin = midpoint between the eyes).
+const CY = "#22e6e3";
+const FACES = {
+  think: `<g class="mf mf-think"><circle cx="-80" cy="-6" r="24" fill="${CY}"/><circle cx="80" cy="-6" r="24" fill="${CY}"/>
+    <circle cx="-72" cy="-14" r="9" fill="#05080a"/><circle cx="88" cy="-14" r="9" fill="#05080a"/>
+    <g class="mf-dots" fill="${CY}"><circle cx="-22" cy="74" r="6"/><circle cx="0" cy="74" r="6"/><circle cx="22" cy="74" r="6"/></g></g>`,
+  cheer: `<g class="mf mf-cheer" fill="none" stroke="${CY}" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M-112 16 Q-80 -34 -48 16" stroke-width="15"/><path d="M48 16 Q80 -34 112 16" stroke-width="15"/>
+    <path d="M-36 52 H36 Q32 94 0 94 Q-32 94 -36 52 Z" fill="${CY}" stroke-width="6"/>
+    <g class="mf-spark" fill="${CY}" stroke="none"><path d="M-128 -34 l5 12 12 5 -12 5 -5 12 -5 -12 -12 -5 12 -5 z"/><path d="M128 -34 l5 12 12 5 -12 5 -5 12 -5 -12 -12 -5 12 -5 z"/></g></g>`,
+  alert: `<g class="mf mf-alert" fill="none" stroke="#ff7a59" stroke-linecap="round">
+    <circle cx="-80" cy="0" r="30" stroke-width="9"/><circle cx="80" cy="0" r="30" stroke-width="9"/>
+    <circle cx="-80" cy="0" r="10" fill="#ff7a59" stroke="none"/><circle cx="80" cy="0" r="10" fill="#ff7a59" stroke="none"/>
+    <ellipse cx="0" cy="76" rx="13" ry="17" stroke-width="8"/></g>`,
+  sleep: `<g class="mf mf-sleep" fill="none" stroke="#7fc4cf" stroke-linecap="round">
+    <path d="M-112 -2 Q-80 30 -48 -2" stroke-width="13"/><path d="M48 -2 Q80 30 112 -2" stroke-width="13"/>
+    <path d="M-12 74 Q0 82 12 74" stroke-width="8"/>
+    <g class="mf-z" fill="#7fc4cf" stroke="none" font-family="Inter,system-ui,sans-serif" font-weight="800"><text x="96" y="-28" font-size="40">z</text><text x="124" y="-58" font-size="30">z</text></g></g>`,
+};
+function faceOverlay(g, mood) {
+  const face = FACES[mood];
+  if (!face) return "";
+  return `<svg class="mochi-face" viewBox="0 0 ${g.w} ${g.h}" aria-hidden="true">
+    <defs><filter id="mf-feather" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter>
+    <linearGradient id="mf-visor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#040506"/><stop offset="1" stop-color="#14171a"/></linearGradient></defs>
+    <g transform="translate(${g.cx} ${g.cy}) rotate(-1.7) scale(${g.k})">
+      <rect x="-142" y="-50" width="282" height="146" rx="38" fill="url(#mf-visor)" filter="url(#mf-feather)"/>${face}</g></svg>`;
+}
 
 const MOCHI_SVG = `
   <ellipse class="m-shadow" cx="80" cy="141" rx="46" ry="6"/>
@@ -70,10 +101,12 @@ const MOCHI_SVG = `
 export function mochi({ mood = "happy", size = 120, class: extra = "" } = {}) {
   if (customUrl) {
     const closeUp = size <= HEAD_MAX;
+    const g = closeUp ? HEAD : FULL;
     const height = closeUp ? size : Math.round(size * 1.5);
-    const width = closeUp ? size : Math.round(height * FULL_RATIO);
+    const width = Math.round((height * g.w) / g.h);
     const wrap = h("span", { class: `mochi-wrap mochi-custom mochi-${mood} ${closeUp ? "mochi-closeup" : "mochi-fullbody"} ${extra}`, style: { width: width + "px", height: height + "px" } });
     wrap.append(h("img", { class: "mochi-img", src: closeUp ? headUrl : customUrl, alt: "Mochi, the BumpAudit mascot", loading: "lazy", draggable: "false" }));
+    wrap.insertAdjacentHTML("beforeend", faceOverlay(g, mood));
     return wrap;
   }
   const wrap = h("span", { class: `mochi-wrap ${extra}`, style: { width: size + "px", height: size * 0.94 + "px" } });

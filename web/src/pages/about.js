@@ -21,8 +21,13 @@ export async function render() {
     ),
 
     h("section", { class: "mochi-section card" },
-      h("div", { class: "mochi-copy" }, h("span", { class: "eyebrow" }, "The mascot"), h("h2", {}, "Meet Mochi"), h("p", { class: "muted" }, "Mochi is the project's mascot, a cat-astronaut robot in a painter's outfit. It cheers on compliant releases, squints at suspicious ones, naps when there is nothing to read and keeps you company while validators work. You will find it across the site."), ),
-      h("div", { class: "mochi-row" }, [["happy", "Happy"], ["think", "Thinking"], ["cheer", "Cheering"], ["alert", "Alert"], ["sleep", "Napping"]].map(([m, label]) => h("figure", {}, mochi({ mood: m, size: 96 }), h("figcaption", {}, label)))),
+      h("div", { class: "mochi-stage" }, mochi({ mood: "happy", size: 230 })),
+      h("div", { class: "mochi-copy" },
+        h("span", { class: "eyebrow" }, "The mascot"),
+        h("h2", {}, "Meet Mochi"),
+        h("p", { class: "muted" }, "Mochi is the project's mascot, a cat-astronaut robot in a painter's outfit. It cheers on compliant releases, squints at suspicious ones, naps when there is nothing to read and keeps you company while validators work. You will find it across the site."),
+        h("div", { class: "mochi-row" }, [["happy", "Happy", "all good"], ["think", "Thinking", "validators reading"], ["cheer", "Cheering", "compliant"], ["alert", "Alert", "mismatch found"], ["sleep", "Napping", "nothing here yet"]].map(([m, label, when]) => h("figure", {}, mochi({ mood: m, size: 96 }), h("figcaption", {}, h("strong", {}, label), h("span", {}, when))))),
+      ),
     ),
 
     h("section", {},
