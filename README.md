@@ -257,7 +257,10 @@ What it does **not** solve:
   from the text of a URL, so the node's renderer must enforce its own egress policy.
 * **Validator agreement is not guaranteed on every real page.** Tolerance for volatile chrome is built in, but very
   dynamic pages may need retries. This is why a failed round reverts without recording anything.
-* **Not yet run against live validators by the author** of this repository. Run `npm run demo` before relying on it.
+* **Live-tested on the demo fixture, not on every real-world page.** The recorded end-to-end run on Studionet (2026-11-05, 131 of 131 checks,
+  see `reports/`) used real validator consensus on the hosted fixture `examples/fixtures/CHANGELOG.md`. Other pages are expected to work if
+  `preview_extraction` shows your entries, but only the fixture is covered by a recorded live run. Studionet is a simulator: re-run `npm run test:live`
+  or `npm run demo` against your own deployment before relying on it.
 
 ## Limits
 
