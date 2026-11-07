@@ -1,0 +1,20 @@
+{
+  "name": "bumpaudit-web",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Web frontend for the BumpAudit GenLayer Intelligent Contract",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "genlayer-js": "1.2.0",
+    "three": "0.169.0",
+    "viem": "^2.57.16"
+  },
+  "devDependencies": {
+    "vite": "5.4.11"
+  }
+}

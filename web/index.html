@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>BumpAudit — do version numbers tell the truth?</title>
+  <meta name="description" content="BumpAudit is a GenLayer Intelligent Contract that audits whether a release's version bump matches what its release notes actually changed." />
+  <meta name="theme-color" content="#07090f" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <meta property="og:title" content="BumpAudit" />
+  <meta property="og:description" content="An on-chain audit of whether version numbers tell the truth. Built on GenLayer." />
+  <meta property="og:type" content="website" />
+  <script>
+    // Apply the saved (or system) theme before first paint to avoid a flash.
+    (function () {
+      try {
+        var saved = localStorage.getItem("ba.theme");
+        var theme = saved === "light" || saved === "dim" || saved === "dark"
+          ? saved
+          : (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        document.documentElement.setAttribute("data-theme", theme);
+        if (localStorage.getItem("ba.motion") === "reduced") document.documentElement.setAttribute("data-motion", "reduced");
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <div id="splash" aria-hidden="true">
+    <div class="splash-inner">
+      <div class="spin-orbit"><span></span><span></span><span></span><img src="./favicon.svg" alt="" /></div>
+      <p>Loading BumpAudit…</p>
+    </div>
+  </div>
+  <div id="app"></div>
+  <noscript>BumpAudit needs JavaScript to talk to the GenLayer network.</noscript>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
