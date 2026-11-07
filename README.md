@@ -23,6 +23,7 @@ Keccak-256 hash of that text. A later re-check detects notes that were **edited*
 **softened** (a breaking line quietly deleted).
 
 - Contract: [`contracts/bump_audit.py`](contracts/bump_audit.py), one self-contained file for GenLayer Studionet
+- Web app: [`web/`](web/), the full frontend (Vite + Three.js, EIP-6963 wallets), already wired to the Studionet deployment
 - Design notes: [`docs/DESIGN.md`](docs/DESIGN.md)
 
 ## Contents
@@ -35,7 +36,8 @@ Keccak-256 hash of that text. A later re-check detects notes that were **edited*
 6. [Testing](#testing)
 7. [Security model and honest limitations](#security-model-and-honest-limitations)
 8. [Limits](#limits)
-9. [Project layout](#project-layout)
+9. [Web frontend](#web-frontend)
+10. [Project layout](#project-layout)
 
 ## How it works
 
@@ -276,6 +278,22 @@ What it does **not** solve:
 
 `get_limits()` returns the live values.
 
+## Web frontend
+
+The `web/` folder holds the complete frontend. It reads and writes the contract through `genlayer-js` and any
+EIP-6963 browser wallet. The default contract address is the Studionet deployment
+`0x54A2774072103a071d3EAB9FBF762A17F193C57e`.
+
+```bash
+cd web
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # static site in web/dist (hash routing, works on GitHub Pages)
+```
+
+Use a different deployment with `VITE_CONTRACT_ADDRESS=0x... npm run build`, or from the app's Settings page.
+`VITE_DEMO=1 npm run dev` serves the UI with sample data and no network. See [`web/README.md`](web/README.md) for details.
+
 ## Project layout
 
 ```
@@ -287,4 +305,5 @@ scripts/e2e.mjs, report.mjs    live adversarial end-to-end runner and its report
 scripts/mutation_check.py      mutation testing
 tools/offline_sim, offline_pytest   strict offline stand-ins for the SDK and pytest
 docs/DESIGN.md                 protocol, threat model, rejected alternatives
+web/                           frontend (Vite): src/lib (wallet, chain, tx), src/pages, src/docs, src/styles
 ```
